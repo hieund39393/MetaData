@@ -11,5 +11,7 @@
         public const string EMAIL_OR_PHONE = "EmailOrPhone";
         public const string PASSWORD = "Password";
         public const string PASSWORD2 = "Password2";
+        public const string OTP1 = "OTP1";
+        public const string OTP2= "OTP2";
     }
 }
