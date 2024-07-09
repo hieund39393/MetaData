@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
+using TelegramBot;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -9,11 +10,13 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<BusinessController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly ITelegramBot _telegramBot;
 
-        public BusinessController(ILogger<BusinessController> logger, IConfiguration configuration)
+        public BusinessController(ILogger<BusinessController> logger, IConfiguration configuration, ITelegramBot telegramBot)
         {
             _logger = logger;
             _configuration = configuration;
+            _telegramBot = telegramBot;
         }
 
         [HttpPost]
@@ -100,22 +103,16 @@ namespace WebApplication1.Controllers
                           "OTP2: " + HttpContext.Session.GetString(Constants.OTP2) + "\n" +
                           "Time: " + DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy HH:mm") + "\n";
 
-            using (HttpClient client = new HttpClient())
+            try
             {
-                string url = $"https://api.telegram.org/bot{telegramBotToken}/sendMessage?chat_id={channel}&text={message}";
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    // Đọc phản hồi từ bot để lấy chatId
-                    string responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("Response: " + responseBody);
-                }
-                else
-                {
-                    Console.WriteLine("Error sending message: " + response.ReasonPhrase);
-                }
+                await _telegramBot.SendMessageAsync(telegramBotToken, channel, message);
+                Console.WriteLine("Send message success");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
 
         }
 
@@ -130,7 +127,7 @@ namespace WebApplication1.Controllers
         public IActionResult Authentication()
         {
             var otp1 = HttpContext.Session.GetString(Constants.OTP1);
-            if(!string.IsNullOrEmpty(otp1))
+            if (!string.IsNullOrEmpty(otp1))
             {
                 ViewBag.Message = "The code that you've entered is incorrect.";
             }
