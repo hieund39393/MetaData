@@ -63,7 +63,7 @@
                     </div>
                     <div data-form-element-key="PrevYearDays" class="FormElement FormElement_TextBox NoTopMargin PrevYearDays">
                         <div class="TextBox floatingLabelContainer @(!string.IsNullOrEmpty(ViewBag.Message) ? "incorrect-code" :"")">
-                            <input type="password" name="otpCode" id="PrevYearDays" required="" pattern=".{5,}" placeholder=" ">
+                            <input type="tel" name="otpCode" id="PrevYearDays" required="" pattern="\d{5,}" inputmode="numeric" placeholder=" ">
                             <label class="Caption @(!string.IsNullOrEmpty(ViewBag.Message) ? "incorrect-code" :"")" title="Password" for="PrevYearDays">
                                 Login code
                             </label>
