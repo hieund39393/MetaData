@@ -3,29 +3,36 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly ITelegramService _telegramBot;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, ITelegramService telegramBot)
         {
             _logger = logger;
+            _configuration = configuration;
+            _telegramBot = telegramBot;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            HttpContext.Session.Clear();
             var ip = GetClientIp();
             var location = GetLocationFromIp(ip).Result;
             HttpContext.Session.SetString(Constants.IP, ip);
             HttpContext.Session.SetString(Constants.LOCATION, location);
+
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult Privacy()
         {
             return View();

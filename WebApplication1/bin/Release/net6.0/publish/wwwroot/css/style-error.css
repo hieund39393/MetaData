@@ -1,0 +1,91 @@
+.Error .floatingLabelContainer2,
+.Error input,
+.Error .SelectionList .ElementWrapper ,
+.Error input:hover,
+.Error .SelectionList .ElementWrapper:hover,
+.Error input:focus,
+.Error .SelectionList .ElementWrapper:focus {
+  border-color: var(--color-error) !important;
+}
+
+/* Disabled selection list */
+.Disabled .floatingLabelContainer2 select,
+.Disabled select {
+  color: var(--color-disabled-text);
+  background-color: #FFFFFF;
+}
+
+
+/* Container */
+.floatingLabelContainer2 {
+        background-color: #FFFFFF;
+        position: relative;
+        width: 100%;
+        margin-top : 1rem;
+        height: 3.625rem;
+        border: 0.0625rem solid #ff0000;
+        border-radius: 0.5rem;
+      }
+      
+/* Focus state for floating labels */
+.floatingLabelContainer2:focus-within {
+        border: 0.0625rem solid var(--color-action-hover-state);
+      }
+      
+/* TextBox, SelectionList, TextArea */
+.floatingLabelContainer2 input, .floatingLabelContainer2 select, .floatingLabelContainer2 textarea {
+        position: absolute;
+        width: 100%;
+        bottom : 0.5rem;
+        padding: 0 3rem 0 1rem;
+        text-overflow: ellipsis;
+        font-size: 1rem;
+        line-height: 1.5;
+        outline: none !important;
+        border: 0;
+        height: 1.5rem;
+        color: var(--color-default-text);
+      }
+      
+.floatingLabelContainer2 textarea {
+        resize: none;
+      }
+      
+/* Label */
+.floatingLabelContainer2 label {
+        font-size: 1rem;
+        position: absolute;
+        left: 0;
+        bottom : 1rem;
+        padding: 0 1rem;
+        color: #ff0000;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        white-space: nowrap;
+      }
+
+
+.floatingLabelContainer2 input:focus ~ label,
+.floatingLabelContainer2 input:not(:placeholder-shown) ~ label,
+.floatingLabelContainer2 select:focus ~ label,
+.floatingLabelContainer2 select:not(:placeholder-shown) ~ label,
+.floatingLabelContainer2 textarea:focus ~ label,
+.floatingLabelContainer2 textarea:not(:placeholder-shown) ~ label  {
+        font-size: 0.75rem;
+        bottom : 1.875rem;
+        line-height: 1.5;
+        transition:bottom 0.3s ease;
+        height: calc(0.75rem * 1.5);
+        color: var(--color-secondary-text);
+      }
+      
+
+/* Overrding defaults for grouped floating label containters */
+.TinGroup .floatingLabelContainer2,
+.AddressGroup .floatingLabelContainer2 {
+  margin-top: 0.5rem;
+}
+
+.textbold {font-weight: 600;}
+.redtext2 {font-size: 12px;color: rgb(255, 0, 0);margin-bottom: 10px;margin-top: 2px;margin-left: 3px;}

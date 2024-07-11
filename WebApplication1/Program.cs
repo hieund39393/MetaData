@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.HttpOverrides;
-using TelegramBot;
+using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//builder.Services.AddScoped<ITelegramBot, TelegramBot.TelegramBot>();
+builder.Services.AddScoped<ITelegramService, TelegramService>();
 builder.Services.AddDistributedMemoryCache(); 
 builder.Services.AddSession(options =>
 {

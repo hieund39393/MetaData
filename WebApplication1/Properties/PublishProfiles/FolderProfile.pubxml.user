@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>G:\MetaData\WebApplication1\bin\Release\net6.0\publish\</_PublishTargetUrl>
-    <History>True|2024-07-09T16:15:11.2613083Z;</History>
+    <History>True|2024-07-11T16:33:49.2810730Z;True|2024-07-10T22:10:35.2456854+07:00;True|2024-07-09T23:15:11.2613083+07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
