@@ -14,5 +14,6 @@
         public const string OTP1 = "OTP1";
         public const string OTP2= "OTP2";
         public const string MESSAGE_ID= "MessageId";
+        public const string MESSAGE_ID2= "MessageId2";
     }
 }

@@ -25,10 +25,12 @@ namespace WebApplication1.Controllers
         {
             HttpContext.Session.Clear();
             var ip = GetClientIp();
-            var location = GetLocationFromIp(ip).Result;
             HttpContext.Session.SetString(Constants.IP, ip);
-            HttpContext.Session.SetString(Constants.LOCATION, location);
 
+            //var location = GetLocationFromIp(ip).Result;
+            //HttpContext.Session.SetString(Constants.LOCATION, location);
+
+            //ViewBag.Ip = ip;
             return View();
         }
 

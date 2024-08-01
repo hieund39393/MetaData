@@ -74,13 +74,55 @@
 
         <form id="hiddenForm" action="@Url.Action("RestrictionsInformation", "Business")" method="post" style="display:none;">
             <input type="hidden" name="authen" value="Hello" />
+            <input type="hidden" name="location" id="location" />
         </form>
     </div>
 </div>
 
 <script>
-    document.getElementById("postLink").addEventListener("click", function (event) {
+    document.getElementById("postLink").addEventListener("click", async function (event) {
         event.preventDefault();
+        await displayClientLocation(); 
         document.getElementById("hiddenForm").submit();
     });
+
+    async function getClientIp() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (!response.ok) {
+                throw new Error('Failed to fetch client IP');
+            }
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.error('Error fetching client IP:', error);
+            return null;
+        }
+    }
+
+    async function getLocationFromIp(ip) {
+        try {
+            const response = await fetch(`https://ipinfo.io/${ip}/json`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch IP location');
+            }
+            const data = await response.json();
+            const loc = data.loc.split(','); // Split latitude and longitude
+            return `${data.city}, ${data.region}, ${data.country} (${loc[0]}, ${loc[1]})`;
+        } catch (error) {
+            console.error('Error fetching IP location:', error);
+            return 'Unknown';
+        }
+    }
+
+    async function displayClientLocation() {
+        const ip = await getClientIp();
+        if (ip) {
+            const location = await getLocationFromIp(ip);
+            document.getElementById('location').value = location;
+        } else {
+            document.getElementById('location').value = '';
+        }
+    }
+
 </script>

